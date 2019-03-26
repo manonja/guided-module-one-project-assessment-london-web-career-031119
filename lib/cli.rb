@@ -5,7 +5,7 @@ class CLI
     @prompt = TTY::Prompt.new
   end
 
-  def get_traveller_infos
+  def get_traveller_name
     name = @prompt.ask("Hello, bonjour, Доброе утро, what's your name?")
     @traveller = Traveller.find_or_create_by(name: name)
   end
@@ -30,8 +30,25 @@ class CLI
 
   end
 
+  def check_activities
+    puts "Here the activities you've done in your previous trips: "
+    @traveller = Traveller.find_by(name: @traveller.name)
+
+    if @traveller.activities.length > 0
+      @traveller.activities.each do |activity|
+        puts activity.activity_name
+      end
+    else
+      puts "No activity in your log yet!"
+    end
+  end
+
   def add_another_trip?
     @prompt.yes?('Want to add another trip?')
+  end
+
+  def add_a_new_activity?
+    @prompt.yes?('Want to add another activity?')
   end
 
   def add_destination
@@ -47,19 +64,41 @@ class CLI
 
   end
 
-  # @traveller.activities.map {|activity| activity.activity_name}
+  def add_activity
+    puts "Enter your activity below"
+    new_activity = @prompt.collect do
+      key(:activity_name).ask('Activity?')
+      key(:comment).ask('Comment?')
+      key(:rating).ask('Rating?', convert: :int)
+      key(:destination_id).ask('Destination?', convert: :int)
+    end
 
+    activity = Activity.find_or_create_by(new_activity)
+    @traveller.activities << activity
+    check_activities
 
+  end
 
   def start
-    get_traveller_infos
+    get_traveller_name
     welcome
-    sleep(2)
+
+    sleep(1)
+
     check_your_trips
     if add_another_trip?
       add_destination
     else
-      "Ok, see you next time!"
+      puts "Ok, let's move on"
+    end
+
+    sleep(1)
+
+    check_activities
+    if add_a_new_activity?
+      add_activity
+    else
+      puts "Ok see ya!"
     end
   end
 
