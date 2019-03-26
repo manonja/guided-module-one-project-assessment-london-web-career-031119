@@ -79,6 +79,20 @@ class CLI
 
   end
 
+  def delete_destination?
+    @prompt.yes?('Do you want to remove a destination from your log?')
+
+  end
+
+  def delete_destination
+    @traveller = Traveller.find_by(name: @traveller.name)
+    choices = @traveller.get_destinations
+    to_delete = @prompt.select("Choose your destiny and remove me...", choices)
+    # destroy the relationship between traveller and destination
+    @city = Destination.find_by(city: to_delete)
+    @city.destroy
+  end
+
   def start
     get_traveller_name
     welcome
@@ -88,6 +102,12 @@ class CLI
     check_your_trips
     if add_another_trip?
       add_destination
+    else
+      puts "Ok, let's move on"
+    end
+
+    if delete_destination?
+      delete_destination
     else
       puts "Ok, let's move on"
     end
