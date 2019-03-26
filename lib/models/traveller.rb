@@ -8,20 +8,15 @@ class Traveller < ActiveRecord::Base
     Traveller.all.map { |traveller| traveller.name}
   end
 
-  def self.average_travellers_age
-    total_ages = Traveller.all.map {|traveller| traveller.age}.sum
-    total_ages / (Traveller.all).length
-  end
-
-  def add_a_new_destination(city, country)
-    trip = Destination.create(city: city, country: country)
-    if trip.save
-      puts "new trip added!"
-    else
-      trip.errors.messages
-    end
-    self.destinations << trip
-  end
+  # def add_a_new_destination(city, country)
+  #   trip = Destination.create(city: city, country: country)
+  #   if trip.save
+  #     puts "new trip added!"
+  #   else
+  #     trip.errors.messages
+  #   end
+  #   self.destinations << trip
+  # end
 
   def get_destinations_by_country
     self.destinations.map {|destination| destination.country}

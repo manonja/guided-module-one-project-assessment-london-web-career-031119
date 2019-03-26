@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 2019_03_25_164343) do
 
   create_table "travellers", force: :cascade do |t|
     t.string "name"
-    t.integer "age"
   end
 
 end
