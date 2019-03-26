@@ -6,9 +6,9 @@ class Destination < ActiveRecord::Base
   validates :city, presence: true
   validates :country, presence: true
 
-  
-
-
+  def self.destinations
+    Destination.all.map {|destination| destination.city}.uniq
+  end
 
 
 end

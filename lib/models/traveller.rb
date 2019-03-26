@@ -2,8 +2,6 @@ class Traveller < ActiveRecord::Base
   has_many :activities
   has_many :destinations, through: :activities
 
-  
-
   validates :name, presence: true
 
   def self.travellers_name
@@ -43,7 +41,8 @@ class Traveller < ActiveRecord::Base
     self.activities.map {|activity| activity.activity_name}
   end
 
-
-
+  def delete
+    self.destroy
+  end
 
 end
