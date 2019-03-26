@@ -11,4 +11,6 @@ desc 'Run the app'
 task :run do
   cli =  CLI.new
   cli.start
+  # binding.pry
+  # 0
 end
