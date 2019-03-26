@@ -2,7 +2,7 @@ require 'TTY'
 class CLI
 
   def initialize
-    @prompt = TTY::Prompt.new
+    @prompt = TTY::Prompt.new(active_color: :cyan)
   end
 
   def get_traveller_name
@@ -78,6 +78,29 @@ class CLI
 
   end
 
+  def edit_comment_on_activity?
+    @prompt.yes?('Want to edit a post on one of your activity?')
+  end
+
+  def edit_comment_on_activity
+    @traveller = Traveller.find_by(name: @traveller.name)
+
+    choices = @traveller.get_activities
+
+    select_activity = @prompt.select("Choose your destiny and edit me...", choices)
+
+    activity = Activity.find_by(activity_name: select_activity)
+
+    # put in the console the current comment
+    puts "#{activity.comment}"
+    new_comment = @prompt.ask("Change this comment below!")
+    # set the new comment to the user input
+    activity.comment = new_comment
+    # save it to the database
+    activity.save
+
+  end
+
   def delete_destination?
     @prompt.yes?('Do you want to remove a destination from your log?')
 
@@ -117,7 +140,13 @@ class CLI
     if add_a_new_activity?
       add_activity
     else
-      puts "Ok see ya!"
+      puts "Ok then...!"
+    end
+
+    if edit_comment_on_activity?
+      edit_comment_on_activity
+    else
+      puts "Ok, see ya!"
     end
   end
 
