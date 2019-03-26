@@ -1,4 +1,5 @@
 require 'TTY'
+
 class CLI
 
   def initialize
@@ -115,6 +116,11 @@ class CLI
     @city.destroy
   end
 
+  def bye_bye
+    puts "Bye Bye!!"
+
+  end
+
   def start
     get_traveller_name
     welcome
@@ -148,6 +154,8 @@ class CLI
     else
       puts "Ok, see ya!"
     end
-  end
 
+    bye_bye
+
+  end
 end
