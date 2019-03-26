@@ -16,7 +16,6 @@ class CLI
 
   def check_your_trips
     puts "Here the trips you currently have in your log: "
-    # binding.pry
     # update traveler
     @traveller = Traveller.find_by(name: @traveller.name)
 
