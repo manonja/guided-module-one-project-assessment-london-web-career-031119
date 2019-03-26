@@ -34,4 +34,8 @@ class Traveller < ActiveRecord::Base
     self.activities.map {|activity| activity.activity_name}
   end
 
+  def get_my_comments
+    self.activities.map {|activity| activity.comment}
+  end
+
 end
