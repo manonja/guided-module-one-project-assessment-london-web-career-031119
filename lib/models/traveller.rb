@@ -2,6 +2,8 @@ class Traveller < ActiveRecord::Base
   has_many :activities
   has_many :destinations, through: :activities
 
+  
+
   validates :name, presence: true
 
   def self.travellers_name
