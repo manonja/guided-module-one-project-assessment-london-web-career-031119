@@ -8,6 +8,8 @@ class Traveller < ActiveRecord::Base
     Traveller.all.map { |traveller| traveller.name}
   end
 
+
+
   # def add_a_new_destination(city, country)
   #   trip = Destination.create(city: city, country: country)
   #   if trip.save
@@ -18,11 +20,7 @@ class Traveller < ActiveRecord::Base
   #   self.destinations << trip
   # end
 
-  def get_destinations_by_country
-    self.destinations.map {|destination| destination.country}
-  end
-
-  def get_destinations_by_city
+  def get_destinations
     self.destinations.map {|destination| destination.city}
   end
 
@@ -34,10 +32,6 @@ class Traveller < ActiveRecord::Base
 
   def get_activities
     self.activities.map {|activity| activity.activity_name}
-  end
-
-  def delete
-    self.destroy
   end
 
 end
