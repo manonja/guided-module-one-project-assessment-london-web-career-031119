@@ -2,10 +2,10 @@ Activity.delete_all
 Traveller.delete_all
 Destination.delete_all
 
-laura = Traveller.create(:name => "Laura", :age => 27)
-mary = Traveller.create(:name => "Mary", :age => 15)
-john = Traveller.create(:name => "John", :age => 45)
-gul = Traveller.create(:name => "Gul", :age => 34)
+laura = Traveller.create(:name => "Laura")
+mary = Traveller.create(:name => "Mary")
+john = Traveller.create(:name => "John")
+gul = Traveller.create(:name => "Gul")
 
 
 montreal = Destination.create(:city => "Montreal", :country => "Canada")
