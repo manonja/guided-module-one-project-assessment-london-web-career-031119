@@ -41,7 +41,8 @@ class Traveller < ActiveRecord::Base
     self.activities.map {|activity| activity.activity_name}
   end
 
-
-
+  def delete
+    self.destroy
+  end
 
 end
