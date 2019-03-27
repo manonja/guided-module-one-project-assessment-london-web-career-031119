@@ -49,7 +49,7 @@ class CLI
       menu
 
     elsif answer == :browse
-      puts "Cool! Run mapscii in your terminal. Arrows to move up, down, left or right. 
+      puts "Cool! Run mapscii in your terminal. Arrows to move up, down, left or right.
       Press a or z to zoom in and out.
       Press q to exit. "
 
@@ -59,7 +59,7 @@ class CLI
       menu
 
     elsif answer == :quit
-      puts "bye bye"
+      quit
     else
       menu
     end
@@ -155,6 +155,10 @@ class CLI
     # destroy the relationship between traveller and destination
     @city = Trip.find_by(city: to_delete)
     @city.destroy
+  end
+
+  def quit
+   puts 'bye bye'
   end
 
   def start
