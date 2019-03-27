@@ -19,7 +19,7 @@ class Traveller < ActiveRecord::Base
   # end
 
   def get_cities
-    self.destinations.map {|destination| destination.city}
+    self.destinations.map {|destination| destination.city}.uniq
   end
 
   def add_new_activity(new_activity)
@@ -28,7 +28,7 @@ class Traveller < ActiveRecord::Base
   end
 
   def get_activities
-    self.activities.map {|activity| activity.activity_name}
+    self.activities.map {|activity| activity.activity_name}.uniq
   end
 
   def get_my_comments
