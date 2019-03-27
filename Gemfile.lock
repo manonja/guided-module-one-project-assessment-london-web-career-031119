@@ -19,7 +19,6 @@ GEM
     equatable (0.5.0)
     faker (1.9.3)
       i18n (>= 0.7)
-    figlet (1.1.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     method_source (0.9.2)
@@ -111,7 +110,6 @@ PLATFORMS
 
 DEPENDENCIES
   faker
-  figlet
   pry
   rake
   require_all
