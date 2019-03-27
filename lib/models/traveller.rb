@@ -1,6 +1,6 @@
 class Traveller < ActiveRecord::Base
   has_many :activities
-  has_many :destinations, through: :activities
+  has_many :trips, through: :activities
 
   validates :name, presence: true
 
@@ -19,7 +19,7 @@ class Traveller < ActiveRecord::Base
   # end
 
   def get_cities
-    self.destinations.map {|destination| destination.city}.uniq
+    self.trips.map {|trip| trip.city}.uniq
   end
 
   def add_new_activity(new_activity)

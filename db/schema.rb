@@ -16,16 +16,16 @@ ActiveRecord::Schema.define(version: 2019_03_25_164343) do
     t.string "activity_name"
     t.text "comment"
     t.integer "traveller_id"
-    t.integer "destination_id"
-  end
-
-  create_table "destinations", force: :cascade do |t|
-    t.string "city"
-    t.string "country"
+    t.integer "trip_id"
   end
 
   create_table "travellers", force: :cascade do |t|
     t.string "name"
+  end
+
+  create_table "trips", force: :cascade do |t|
+    t.string "city"
+    t.string "country"
   end
 
 end

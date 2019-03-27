@@ -8,11 +8,11 @@ john = Traveller.create(:name => "John")
 gul = Traveller.create(:name => "Gul")
 
 
-montreal = Destination.create(:city => "Montreal", :country => "Canada")
-moscou = Destination.create(:city => "Moscou", :country => "Russia")
-cape_town = Destination.create(:city => "Cape Town", :country => "South Africa")
-lima = Destination.create(:city => "Lima", :country => "Peru")
-nyc = Destination.create(:city => "NYC", :country => "NY, US")
+montreal = Trip.create(:city => "Montreal", :country => "Canada")
+moscou = Trip.create(:city => "Moscou", :country => "Russia")
+cape_town = Trip.create(:city => "Cape Town", :country => "South Africa")
+lima = Trip.create(:city => "Lima", :country => "Peru")
+nyc = Trip.create(:city => "NYC", :country => "NY, US")
 
 hiking = Activity.create(:activity_name => "hiking", :comment => "awesome trip", :traveller_id => laura.id, :destination_id => montreal.id)
 photography = Activity.create(:activity_name => "photography", :comment => "great light, great people", :traveller_id => laura.id, :destination_id => moscou.id)
