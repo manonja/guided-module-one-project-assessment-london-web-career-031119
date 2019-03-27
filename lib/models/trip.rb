@@ -1,4 +1,4 @@
-class Destination < ActiveRecord::Base
+class Trip < ActiveRecord::Base
   has_many :activities
   has_many :travellers, through: :activities
 
@@ -6,12 +6,12 @@ class Destination < ActiveRecord::Base
   validates :city, presence: true
   validates :country, presence: true
 
-  def self.destinations
-    Destination.all.map {|destination| destination.city}.uniq
+  def self.trips
+    Trip.all.map {|trip| trip.city}.uniq
   end
 
   def self.all_cities
-    self.all.map {|destination| destination.city }
+    self.all.map {|trip| trip.city }
   end
 
 

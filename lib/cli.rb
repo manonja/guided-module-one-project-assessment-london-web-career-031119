@@ -20,7 +20,7 @@ class CLI
     choices = {
         'Check your saved trips': :view ,
         'Add trip': :add_trip,
-        'Add an activity on a trip': :add_activity,
+        'Add activity on a trip': :add_activity,
         'Edit post on activity': :edit,
         'Browse the world': :browse,
         'Delete trip': :delete,
@@ -30,14 +30,11 @@ class CLI
 
     if answer == :view
       view_trips
-      puts "Cool! Let's do something else!"
       menu
 
     elsif answer == :add_trip
-      view_trips
-      puts "Let's add another trip then:"
-      add_destination
-      puts "Cool! you just added a new trip."
+      puts "Cool, let's add a new trip!"
+      puts "You've just added a new trip."
       menu
 
     elsif answer == :add_activity
@@ -52,10 +49,10 @@ class CLI
       menu
 
     elsif answer == :browse
-      puts "Cool! Run mapscii in your terminal. Arrows to move up, down, left or right. n/
-      Press a or z to zoom in and out. n/
+      puts "Cool! Run mapscii in your terminal. Arrows to move up, down, left or right. 
+      Press a or z to zoom in and out.
       Press q to exit. "
-      
+
 
     elsif answer == :delete
       delete_destination
@@ -75,10 +72,11 @@ class CLI
     # update traveler
     @traveller = Traveller.find_by(name: @traveller.name)
 
-    if @traveller.destinations.length > 0
-      @traveller.destinations.uniq.each do |destination|
-      puts destination.city
+    if @traveller.trips.length > 0
+      @traveller.trips.uniq.each do |trip|
+      puts trip.city
       end
+      puts "Cool! Let's do something else!"
     else
       puts "...No saved trip yet... But guess what, you can add one now!"
     end
@@ -99,15 +97,15 @@ class CLI
     end
   end
 
-  def add_destination
+  def add_trip
     puts "Create a new trip below: "
     new_trip = @prompt.collect do
       key(:city).ask('City?')
       key(:country).ask('Country?')
     end
 
-    trip = Destination.find_or_create_by(new_trip)
-    @traveller.destinations << trip
+    trip = Trip.find_or_create_by(new_trip)
+    @traveller.trips << trip
     trip
   end
 
@@ -120,11 +118,11 @@ class CLI
     new_activity[:comment] = @prompt.ask('Comment?')
     new_activity[:traveller] = @traveller
 
-    if @traveller.destinations.length > 0
-      destination_name = @prompt.select('Where was that?', @traveller.get_cities)
-      new_activity[:destination] = Destination.find_by(city: destination_name)
+    if @traveller.trips.length > 0
+      trip_name = @prompt.select('Where was that?', @traveller.get_cities)
+      new_activity[:trip] = Trip.find_by(city: trip_name)
     else
-      new_activity[:destination] = add_destination
+      new_activity[:trip] = add_trip
     end
 
     activity = @traveller.add_new_activity(new_activity)
@@ -155,7 +153,7 @@ class CLI
     choices = @traveller.get_cities
     to_delete = @prompt.select("Choose your destiny and remove me...", choices)
     # destroy the relationship between traveller and destination
-    @city = Destination.find_by(city: to_delete)
+    @city = Trip.find_by(city: to_delete)
     @city.destroy
   end
 
