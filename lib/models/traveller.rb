@@ -8,8 +8,6 @@ class Traveller < ActiveRecord::Base
     Traveller.all.map { |traveller| traveller.name}
   end
 
-
-
   # def add_a_new_destination(city, country)
   #   trip = Destination.create(city: city, country: country)
   #   if trip.save
@@ -20,14 +18,13 @@ class Traveller < ActiveRecord::Base
   #   self.destinations << trip
   # end
 
-  def get_destinations
+  def get_cities
     self.destinations.map {|destination| destination.city}
   end
 
-  def add_new_activity(activity_name, comment, rating, destination_id)
-    new_activity = Activity.create(activity_name: activity_name, comment: comment,
-      rating: rating, traveller_id: self, destination_id: destination_id)
-        self.activities << new_activity
+  def add_new_activity(new_activity)
+    new_activity = new_activity.merge({ traveller: self })
+    Activity.create(new_activity)
   end
 
   def get_activities

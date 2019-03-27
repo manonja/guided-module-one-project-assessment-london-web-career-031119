@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 2019_03_25_164343) do
   create_table "activities", force: :cascade do |t|
     t.string "activity_name"
     t.text "comment"
-    t.integer "rating"
     t.integer "traveller_id"
     t.integer "destination_id"
   end

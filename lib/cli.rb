@@ -59,23 +59,26 @@ class CLI
 
     trip = Destination.find_or_create_by(new_trip)
     @traveller.destinations << trip
-    check_your_trips
-
+    trip
   end
 
   def add_activity
+
     puts "Enter your activity below"
-    new_activity = @prompt.collect do
-      key(:activity_name).ask('Activity?')
-      key(:comment).ask('Comment?')
-      key(:rating).ask('Rating?', convert: :int)
-      key(:destination_id).ask('Destination?', convert: :int)
+    new_activity = {}
+
+    new_activity[:activity_name] = @prompt.ask('Activity?')
+    new_activity[:comment] = @prompt.ask('Comment?')
+    new_activity[:traveller] = @traveller
+
+    if @traveller.destinations.length > 0
+      destination_name = @prompt.select('Destination?', @traveller.get_cities)
+      new_activity[:destination] = Destination.find_by(city: destination_name)
+    else
+      new_activity[:destination] = add_destination
     end
 
-    activity = Activity.find_or_create_by(new_activity)
-    @traveller.activities << activity
-    check_activities
-
+    activity = @traveller.add_new_activity(new_activity)
   end
 
   def edit_comment_on_activity?
@@ -114,6 +117,7 @@ class CLI
     @city = Destination.find_by(city: to_delete)
     @city.destroy
   end
+
 
   def start
     get_traveller_name
