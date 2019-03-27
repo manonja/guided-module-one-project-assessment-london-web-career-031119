@@ -10,5 +10,11 @@ class Destination < ActiveRecord::Base
     Destination.all.map {|destination| destination.city}.uniq
   end
 
+  def self.all_cities
+    self.all.map {|destination| destination.city }
+  end
+
+
+
 
 end
