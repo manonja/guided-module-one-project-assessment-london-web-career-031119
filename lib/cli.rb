@@ -4,7 +4,9 @@ require 'tty-prompt'
 class CLI
 
   def initialize
+    system ("clear")
     @prompt = TTY::Prompt.new
+    system("Figlet Travel Ta Life")
   end
 
   def get_traveller_name
@@ -13,87 +15,149 @@ class CLI
   end
 
   def welcome
-    puts "Hey #{@traveller.name}, welcome to Travel Ta Life!"
+    system("Figlet Hey #{@traveller.name}, Welcome!")
   end
 
-  def menu
+  def main_menu
     choices = {
-        'Check your saved trips': :view ,
-        'Add trip': :add_trip,
-        'Add activity on a trip': :add_activity,
-        'Edit post on activity': :edit,
+        'Trips': :trips,
+        'Activities': :activities,
         'Browse the world': :browse,
-        'Delete trip': :delete,
         'Exit Travel Ta Life': :quit
       }
     answer = @prompt.select("What are you up to?", choices)
 
-    if answer == :view
-      view_trips
-      menu
+    if answer == :trips
+      trip_menu
 
-    elsif answer == :add_trip
-      puts "Cool, let's add a new trip!"
-      puts "You've just added a new trip."
-      menu
-
-    elsif answer == :add_activity
-      view_activities
-      add_activity
-      puts "Cool, you just added a new activity to your log"
-      menu
-
-    elsif answer == :edit
-      edit_comment_on_activity
-      puts "New post saved!"
-      menu
+    elsif answer == :activities
+      activity_menu
 
     elsif answer == :browse
-      puts "Cool! Run mapscii in your terminal. Arrows to move up, down, left or right.
-      Press a or z to zoom in and out.
-      Press q to exit. "
-
-
-    elsif answer == :delete
-      delete_destination
-      menu
+      system("mapscii")
 
     elsif answer == :quit
       quit
     else
-      menu
+      main_menu
     end
 
   end
 
+  def trip_menu
+    choices = {
+        'View my trips': :view,
+        'Add new trip': :add,
+        'Delete trip': :delete,
+        'Main menu': :main,
+        'Exit Travel Ta Life': :quit
+
+      }
+    answer = @prompt.select("Choose your destiny", choices)
+
+    if answer == :view
+      view_trips
+      trip_menu
+    elsif answer == :add
+      add_trip
+      trip_menu
+    elsif answer == :delete
+      delete_trip
+      trip_menu
+    elsif answer == :main
+      main_menu
+    elsif answer == :quit
+      quit
+    else
+      trip_menu
+    end
+  end
+
+  def activity_menu
+    choices = {
+        'View my activities': :view,
+        'Create new activity': :create,
+        'Edit post on activity': :edit,
+        'Main menu': :main,
+        'Exit Travel Ta Life': :quit
+
+      }
+    answer = @prompt.select("Choose your destiny", choices)
+
+    if answer == :view
+      view_activities
+      activity_menu
+    elsif answer == :create
+      add_activity
+      activity_menu
+    elsif answer == :edit
+      edit_post_on_activity
+      activity_menu
+    elsif answer == :main
+      main_menu
+    elsif answer == :quit
+      quit
+    else
+      activity_menu
+    end
+  end
+
 
   def view_trips
-    puts "Here the trips you currently have in your log: "
+    puts " "
+    puts " "
+    puts "*********************************************"
+    puts "     ***********************************"
+    puts "              *****************"
+    puts "                  *********"
+    puts "                    *****"
+    puts "                     ***"
+    puts "                      * "
+
+
     # update traveler
     @traveller = Traveller.find_by(name: @traveller.name)
 
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
-      puts trip.city
+      puts " "
+      puts " "
+      puts "Here the trips you currently have in your log: "
+      puts " "
+      puts " "
+      puts "#{trip.city} | #{trip.country}"
+      puts " "
+      puts " "
       end
       puts "Cool! Let's do something else!"
+      puts " "
+      puts " "
     else
+      puts "_____________________________________________________________"
       puts "...No saved trip yet... But guess what, you can add one now!"
+      puts "_____________________________________________________________"
+
     end
 
   end
 
   def view_activities
+    puts "_____________________________________________________________"
     puts "Here the activities you've done in your previous trips: "
+    puts "_____________________________________________________________"
     @traveller = Traveller.find_by(name: @traveller.name)
 
     if @traveller.activities.length > 0
       @traveller.activities.each do |activity|
-        puts activity.activity_name if activity.activity_name != nil
-
+        puts "*********************************************"
+        puts activity.activity_name if (activity.activity_name != nil)
+        puts "*********************************************"
       end
     else
-      puts "No activity in your log yet!"
+      puts "_____________________________________________________________"
+      puts "No activity in your log yet. But let's add one!"
+      puts "_____________________________________________________________"
+
     end
   end
 
@@ -107,6 +171,7 @@ class CLI
     trip = Trip.find_or_create_by(new_trip)
     @traveller.trips << trip
     trip
+    puts "Cool, you just created a new trip."
   end
 
   def add_activity
@@ -128,7 +193,7 @@ class CLI
     activity = @traveller.add_new_activity(new_activity)
   end
 
-  def edit_comment_on_activity
+  def edit_post_on_activity
     @traveller = Traveller.find_by(name: @traveller.name)
 
     choices = @traveller.get_activities
@@ -137,8 +202,7 @@ class CLI
 
     activity = Activity.find_by(activity_name: select_activity)
 
-    # put in the console the current trip, activity, and comment:
-    # TODO add trip
+    # put in the console the current trip, activity, and comment
     puts "Activity: #{activity.activity_name} | Current post: #{activity.comment}"
     new_comment = @prompt.ask("Type your new post: ")
     # set the new comment to the user input
@@ -148,7 +212,7 @@ class CLI
 
   end
 
-  def delete_destination
+  def delete_trip
     @traveller = Traveller.find_by(name: @traveller.name)
     choices = @traveller.get_cities
     to_delete = @prompt.select("Choose your destiny and remove me...", choices)
@@ -158,13 +222,12 @@ class CLI
   end
 
   def quit
-   puts 'bye bye'
+   system("Figlet byebye!")
   end
 
   def start
     get_traveller_name
     welcome
-    menu
-
+    main_menu
   end
 end
