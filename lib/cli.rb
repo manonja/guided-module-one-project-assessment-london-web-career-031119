@@ -78,6 +78,7 @@ class CLI
         'View my activities': :view,
         'Create new activity': :create,
         'Edit post on activity': :edit,
+        'View most popular activity': :popular,
         'Main menu': :main,
         'Exit Travel Ta Life': :quit
 
@@ -92,6 +93,9 @@ class CLI
       activity_menu
     elsif answer == :edit
       edit_post_on_activity
+      activity_menu
+    elsif answer == :popular
+      most_popular_activity
       activity_menu
     elsif answer == :main
       main_menu
@@ -210,6 +214,10 @@ class CLI
     # save it to the database
     activity.save
 
+  end
+
+  def most_popular_activity
+    puts "#{Activity.most_popular_activity}"
   end
 
   def delete_trip
