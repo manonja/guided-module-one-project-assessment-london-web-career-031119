@@ -125,41 +125,45 @@ class CLI
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
       puts " "
-      puts " "
-      puts "Here the trips you currently have in your log: "
-      puts " "
-      puts " "
       puts "#{trip.city} | #{trip.country}"
-      puts " "
       puts " "
       end
       puts "Cool! Let's do something else!"
       puts " "
-      puts " "
     else
-      puts "_____________________________________________________________"
+      puts " "
+      puts " "
       puts "...No saved trip yet... But guess what, you can add one now!"
-      puts "_____________________________________________________________"
+      puts " "
+      puts " "
 
     end
 
   end
 
   def view_activities
+    puts " "
+    puts " "
     puts "_____________________________________________________________"
     puts "Here the activities you've done in your previous trips: "
-    puts "_____________________________________________________________"
+    puts " "
+    puts " "
+
     @traveller = Traveller.find_by(name: @traveller.name)
 
     if @traveller.activities.length > 0
       @traveller.activities.each do |activity|
-        puts "*********************************************"
+        puts " "
         puts activity.activity_name if (activity.activity_name != nil)
-        puts "*********************************************"
+        puts " "
+        puts " "
       end
     else
-      puts "_____________________________________________________________"
+      puts " "
+      puts " "
       puts "No activity in your log yet. But let's add one!"
+      puts " "
+      puts " "
       puts "_____________________________________________________________"
 
     end
@@ -175,11 +179,14 @@ class CLI
     trip = Trip.find_or_create_by(new_trip)
     @traveller.trips << trip
     trip
+    puts " "
+    puts " "
     puts "Cool, you just created a new trip."
   end
 
   def add_activity
-
+    puts " "
+    puts " "
     puts "Enter a new activity below"
     new_activity = {}
 
@@ -188,10 +195,16 @@ class CLI
     new_activity[:traveller] = @traveller
 
     if @traveller.trips.length > 0
+      puts " "
+      puts " "
       trip_name = @prompt.select('Where was that?', @traveller.get_cities)
       new_activity[:trip] = Trip.find_by(city: trip_name)
     else
+      puts " "
+      puts " "
+      "Where was that?"
       new_activity[:trip] = add_trip
+
     end
 
     activity = @traveller.add_new_activity(new_activity)
@@ -207,7 +220,11 @@ class CLI
     activity = Activity.find_by(activity_name: select_activity)
 
     # put in the console the current trip, activity, and comment
+    puts " "
+    puts " "
     puts "Activity: #{activity.activity_name} | Current post: #{activity.comment}"
+    puts " "
+    puts " "
     new_comment = @prompt.ask("Type your new post: ")
     # set the new comment to the user input
     activity.comment = new_comment
@@ -217,7 +234,13 @@ class CLI
   end
 
   def most_popular_activity
-    puts "#{Activity.most_popular_activity}"
+    puts " "
+    puts " "
+    puts " "
+    puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
+    puts " "
+    puts " "
+    puts " "
   end
 
   def delete_trip
