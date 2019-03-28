@@ -1,5 +1,8 @@
 require 'tty'
 require 'tty-prompt'
+require 'json'
+require 'rest-client'
+
 
 class CLI
 
@@ -7,6 +10,7 @@ class CLI
     system ("clear")
     @prompt = TTY::Prompt.new
     system("Figlet Travel Ta Life")
+
   end
 
   def get_traveller_name
@@ -19,6 +23,9 @@ class CLI
   end
 
   def main_menu
+    system ("clear")
+    system("Figlet Travel Ta Life")
+
     choices = {
         'Trips': :trips,
         'Activities': :activities,
@@ -74,6 +81,7 @@ class CLI
   end
 
   def activity_menu
+
     choices = {
         'View my activities': :view,
         'Create new activity': :create,
@@ -125,10 +133,16 @@ class CLI
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
       puts " "
-      puts "#{trip.city} | #{trip.country}"
+      if trip.continent != " "
+
+      puts "#{trip.city} | #{trip.country} | #{trip.continent}"
       puts " "
+
+    else
+      puts "#{trip.city} | #{trip.country}"
+    end
       end
-      puts "Cool! Let's do something else!"
+      puts "Cool! Let's do something else! "
       puts " "
     else
       puts " "
@@ -154,7 +168,7 @@ class CLI
     if @traveller.activities.length > 0
       @traveller.activities.each do |activity|
         puts " "
-        puts activity.activity_name if (activity.activity_name != nil)
+        puts activity.activity_name if (activity.activity_name != nil && activity.activity_name != " ")
         puts " "
         puts " "
       end
@@ -174,6 +188,8 @@ class CLI
     new_trip = @prompt.collect do
       key(:city).ask('City?')
       key(:country).ask('Country?')
+      key(:continent).ask('Continent?')
+
     end
 
     trip = Trip.find_or_create_by(new_trip)
@@ -200,10 +216,10 @@ class CLI
       trip_name = @prompt.select('Where was that?', @traveller.get_cities)
       new_activity[:trip] = Trip.find_by(city: trip_name)
     else
-      puts " "
-      puts " "
+
       "Where was that?"
       new_activity[:trip] = add_trip
+
 
     end
 

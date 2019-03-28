@@ -1,3 +1,7 @@
+require 'json'
+require 'rest-client'
+
+
 class Trip < ActiveRecord::Base
   has_many :activities
   has_many :travellers, through: :activities
@@ -12,6 +16,11 @@ class Trip < ActiveRecord::Base
 
   def self.all_cities
     self.all.map {|trip| trip.city }
+  end
+
+  def get_countries_data
+    url = "https://www.googleapis.com/books/v1/volumes?q=#{search_term}"
+
   end
 
 

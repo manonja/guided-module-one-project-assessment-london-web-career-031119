@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2019_03_25_164343) do
   create_table "trips", force: :cascade do |t|
     t.string "city"
     t.string "country"
+    t.string "continent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
