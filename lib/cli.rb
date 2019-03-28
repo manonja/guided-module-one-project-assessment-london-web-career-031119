@@ -1,8 +1,7 @@
 require 'tty'
-require 'tty-prompt'
 require 'json'
+require 'tty-prompt'
 require 'rest-client'
-
 
 class CLI
 
@@ -36,19 +35,15 @@ class CLI
 
     if answer == :trips
       trip_menu
-
     elsif answer == :activities
       activity_menu
-
     elsif answer == :browse
-      system("mapscii")
-
+      browse_world_menu
     elsif answer == :quit
       quit
     else
       main_menu
     end
-
   end
 
   def trip_menu
@@ -114,72 +109,64 @@ class CLI
     end
   end
 
+  def browse_world_menu
+    choices = {
+        'Country facts': :view,
+        'Get real': :browse,
+        'Main menu': :main,
+        'Exit Travel Ta Life': :quit
+      }
+    answer = @prompt.select("COOL STUFF AHEAD", choices)
+
+    if answer == :view
+      country_facts
+      browse_world_menu
+    elsif answer == :browse
+      system("mapscii")
+      browse_world_menu
+    elsif answer == :main
+      main_menu
+    elsif answer == :quit
+      quit
+    else
+      browse_world_menu
+    end
+
+  end
+
 
   def view_trips
-    puts " "
-    puts " "
-    puts "*********************************************"
-    puts "     ***********************************"
-    puts "              *****************"
-    puts "                  *********"
-    puts "                    *****"
-    puts "                     ***"
-    puts "                      * "
-
 
     # update traveler
-    @traveller = Traveller.find_by(name: @traveller.name)
+    # @traveller = Traveller.find_by(name: @traveller.name)
 
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
-      puts " "
       if trip.continent != " "
-
       puts "#{trip.city} | #{trip.country} | #{trip.continent}"
-      puts " "
-
     else
       puts "#{trip.city} | #{trip.country}"
     end
       end
       puts "Cool! Let's do something else! "
-      puts " "
     else
-      puts " "
-      puts " "
       puts "...No saved trip yet... But guess what, you can add one now!"
-      puts " "
-      puts " "
-
     end
 
   end
 
   def view_activities
-    puts " "
-    puts " "
-    puts "_____________________________________________________________"
     puts "Here the activities you've done in your previous trips: "
-    puts " "
-    puts " "
 
     @traveller = Traveller.find_by(name: @traveller.name)
 
     if @traveller.activities.length > 0
       @traveller.activities.each do |activity|
-        puts " "
         puts activity.activity_name if (activity.activity_name != nil && activity.activity_name != " ")
-        puts " "
-        puts " "
+
       end
     else
-      puts " "
-      puts " "
       puts "No activity in your log yet. But let's add one!"
-      puts " "
-      puts " "
-      puts "_____________________________________________________________"
-
     end
   end
 
@@ -195,14 +182,11 @@ class CLI
     trip = Trip.find_or_create_by(new_trip)
     @traveller.trips << trip
     trip
-    puts " "
-    puts " "
-    puts "Cool, you just created a new trip."
+    puts "Cool, you just created #{trip}."
   end
 
   def add_activity
-    puts " "
-    puts " "
+
     puts "Enter a new activity below"
     new_activity = {}
 
@@ -211,15 +195,11 @@ class CLI
     new_activity[:traveller] = @traveller
 
     if @traveller.trips.length > 0
-      puts " "
-      puts " "
       trip_name = @prompt.select('Where was that?', @traveller.get_cities)
       new_activity[:trip] = Trip.find_by(city: trip_name)
     else
-
       "Where was that?"
       new_activity[:trip] = add_trip
-
 
     end
 
@@ -235,12 +215,8 @@ class CLI
 
     activity = Activity.find_by(activity_name: select_activity)
 
-    # put in the console the current trip, activity, and comment
-    puts " "
-    puts " "
     puts "Activity: #{activity.activity_name} | Current post: #{activity.comment}"
-    puts " "
-    puts " "
+
     new_comment = @prompt.ask("Type your new post: ")
     # set the new comment to the user input
     activity.comment = new_comment
@@ -250,13 +226,8 @@ class CLI
   end
 
   def most_popular_activity
-    puts " "
-    puts " "
-    puts " "
     puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
-    puts " "
-    puts " "
-    puts " "
+
   end
 
   def delete_trip
@@ -266,6 +237,28 @@ class CLI
     # destroy the relationship between traveller and destination
     @city = Trip.find_by(city: to_delete)
     @city.destroy
+  end
+
+  def get_country_data(name)
+    url = "https://restcountries.eu/rest/v2/name/#{name}"
+    response = RestClient.get(url)
+    # get an array of hashes
+     data = JSON.parse(response)
+     data_hash = data[0]
+     # get the country name
+     country = data_hash["name"]
+     capital = data_hash["capital"]
+     population = data_hash["population"]
+     languages = []
+     data_hash["languages"][0].each {|key, value| languages << value}
+     # binding.pry
+     puts "Country: #{country}  |  Capital: #{capital}  |  Population: #{population}  |  Languages spoken in this country: #{languages.join(", ")}."
+
+  end
+
+  def country_facts
+    answer = @prompt.ask("Which country are you curious about?")
+    get_country_data(answer)
   end
 
   def quit
