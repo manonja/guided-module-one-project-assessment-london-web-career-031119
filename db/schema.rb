@@ -15,17 +15,23 @@ ActiveRecord::Schema.define(version: 2019_03_25_164343) do
   create_table "activities", force: :cascade do |t|
     t.string "activity_name"
     t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "traveller_id"
     t.integer "trip_id"
   end
 
   create_table "travellers", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "trips", force: :cascade do |t|
     t.string "city"
     t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
