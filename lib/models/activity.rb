@@ -12,4 +12,5 @@ class Activity < ActiveRecord::Base
     activities_name.group_by(&:to_s).values.max_by(&:size).try(:first)
   end
 
+
 end

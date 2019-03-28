@@ -31,8 +31,8 @@ class Traveller < ActiveRecord::Base
     self.activities.map {|activity| activity.activity_name}.uniq
   end
 
-  def get_my_comments
-    self.activities.map {|activity| activity.comment}
+  def my_posts
+    self.activities.map {|activity| activity.comment }
   end
 
 end
