@@ -3,6 +3,8 @@ class CreateTripsTable < ActiveRecord::Migration[5.2]
     create_table :trips do |t|
       t.string :city
       t.string :country
+      t.timestamps
+
     end
   end
 end
