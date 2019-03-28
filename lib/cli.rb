@@ -1,7 +1,6 @@
 require 'tty'
 require 'tty-prompt'
-require 'json'
-require 'rest-client'
+
 
 
 class CLI
@@ -256,7 +255,7 @@ class CLI
     puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
     puts " "
     puts " "
-    puts " "
+
   end
 
   def delete_trip
