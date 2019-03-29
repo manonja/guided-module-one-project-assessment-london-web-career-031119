@@ -107,6 +107,7 @@ The main menu should appear in your terminal!
 - gem "rake"
 - gem 'artii'
 - gem 'rainbow'
+- gem "lolcat"
 
 ## Author
 
