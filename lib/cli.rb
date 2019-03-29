@@ -5,25 +5,26 @@ require 'rest-client'
 
 class CLI
 
+
   def initialize
     system ("clear")
     @prompt = TTY::Prompt.new
-    system("Figlet Travel Ta Life")
+    system ("artii 'Travel Ta Life' --font slant | lolcat")
 
   end
 
   def get_traveller_name
+    puts "*" * 60
     name = @prompt.ask("Hello, bonjour, Доброе утро, what's your name?")
     @traveller = Traveller.find_or_create_by(name: name)
   end
 
   def welcome
-    system("Figlet Hey #{@traveller.name}, Welcome!")
+    system("Figlet Hey #{@traveller.name}, Welcome! | lolcat")
+    puts " "
   end
 
   def main_menu
-    system ("clear")
-    system("Figlet Travel Ta Life")
 
     choices = {
         'Trips': :trips,
@@ -31,7 +32,7 @@ class CLI
         'Browse the world': :browse,
         'Exit Travel Ta Life': :quit
       }
-    answer = @prompt.select("What are you up to?", choices)
+    answer = @prompt.select(" ---------------  Ok! What are you up to? ---------------", choices)
 
     if answer == :trips
       trip_menu
@@ -143,7 +144,7 @@ class CLI
       @traveller.trips.uniq.each do |trip|
       puts "#{trip.city} | #{trip.country}"
     end
-      end
+
       puts "Cool! Let's do something else! "
     else
       puts "...No saved trip yet... But guess what, you can add one now!"
@@ -221,7 +222,9 @@ class CLI
   end
 
   def most_popular_activity
-    puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
+    system ("People ❤ #{Activity.most_popular_activity} | lolcat -a -d 500")
+
+    # puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
 
   end
 
@@ -257,7 +260,8 @@ class CLI
   end
 
   def quit
-   system("Figlet byebye!")
+   # system("sl")
+   puts "byebye"
   end
 
   def start
