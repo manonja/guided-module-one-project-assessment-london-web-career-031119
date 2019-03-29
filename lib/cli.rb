@@ -131,7 +131,6 @@ class CLI
     else
       browse_world_menu
     end
-
   end
 
 
@@ -142,9 +141,6 @@ class CLI
 
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
-      if trip.continent != " "
-      puts "#{trip.city} | #{trip.country} | #{trip.continent}"
-    else
       puts "#{trip.city} | #{trip.country}"
     end
       end
@@ -175,7 +171,6 @@ class CLI
     new_trip = @prompt.collect do
       key(:city).ask('City?')
       key(:country).ask('Country?')
-      key(:continent).ask('Continent?')
 
     end
 
