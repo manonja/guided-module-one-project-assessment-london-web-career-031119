@@ -3,7 +3,7 @@ Module One Final Project - Travel Ta Life
 
 ---
 
-### Project background
+## Project background
 
 Building a **Command Line CRUD App** that uses a database to persist information. The goal of which is to demonstrate all the following skills:
 
@@ -21,14 +21,15 @@ The project:
 
 ---
 
-### Travel Ta Life CLI application
+## Travel Ta Life CLI application
 
 Use my little travel log app to keep track of your trips and create new ones. You can also
 specify activities you've done on a trip and write a post about it. Lastly, you can browse the world
 with an interactive world map in the terminal, as well as get more infos on a country you're curious about.
 
+---
 
-### Getting started
+## Getting started
 
 Fork and clone the repository: https://github.com/manonja/guided-module-one-project-assessment-london-web-career-031119
 
@@ -39,7 +40,9 @@ Run Travel Ta Life in your command line by running:
 
 The main menu should appear in your terminal!
 
-### Use
+---
+
+### Uses
 
 1. You will be asked for your name, so first, enter your name!
 
@@ -70,10 +73,12 @@ The main menu should appear in your terminal!
     - Main main
     - Exit
 
+  ---
 
-### MVP and stretch goals
 
-## MVP
+## MVP and stretch goals
+
+### MVP
 
 - Include a basic menu in the CLI with which the user can interact
 - Show traveler's trip
@@ -83,7 +88,7 @@ The main menu should appear in your terminal!
 - Include different menus
 - Use an API
 
-## Stretch goals
+### Stretch goals
 
 - Include Skyscanner API so a user can know how to get to his next trip
 - Get animated art in the CLI
@@ -91,7 +96,7 @@ The main menu should appear in your terminal!
 - Include colour in the command line interface using ASCII art gems
 - Include MAPSCII so we can display a world map in the terminal
 
-### gems used
+## gems used
 - gem "sinatra-activerecord"
 - gem "sqlite3"
 - gem "pry"
@@ -103,6 +108,6 @@ The main menu should appear in your terminal!
 - gem 'artii'
 - gem 'rainbow'
 
-### Author
+## Author
 
 Manon Jacquin - https://github.com/manonja
