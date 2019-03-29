@@ -1,5 +1,5 @@
 Module One Final Project - Travel Ta Life
-========================
+=========================================
 
 ---
 
@@ -42,7 +42,7 @@ The main menu should appear in your terminal!
 
 ---
 
-### Uses
+## Uses
 
 1. You will be asked for your name, so first, enter your name!
 
