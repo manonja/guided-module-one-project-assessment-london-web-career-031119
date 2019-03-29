@@ -51,6 +51,7 @@ GEM
     rack (2.0.6)
     rack-protection (2.0.5)
       rack
+    rainbow (3.0.0)
     rake (12.3.2)
     require_all (2.0.0)
     rest-client (2.0.2)
@@ -138,6 +139,7 @@ DEPENDENCIES
   json
   lolcat
   pry
+  rainbow
   rake
   require_all
   rest-client

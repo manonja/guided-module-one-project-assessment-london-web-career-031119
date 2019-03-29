@@ -2,20 +2,27 @@ require 'tty'
 require 'json'
 require 'tty-prompt'
 require 'rest-client'
+require 'rainbow'
+require 'pry'
 
 class CLI
 
 
   def initialize
     system ("clear")
-    @prompt = TTY::Prompt.new
+    @prompt = TTY::Prompt.new(active_color: :cyan)
     system ("artii 'Travel Ta Life' --font slant | lolcat")
 
   end
 
   def get_traveller_name
     puts "*" * 60
-    name = @prompt.ask("Hello, bonjour, Доброе утро, what's your name?")
+
+    name = @prompt.ask("Hello, bonjour, Доброе утро, what's your name?") do |q|
+      q.required true
+      q.validate /\A\w+\Z/
+      q.modify :capitalize
+    end
     @traveller = Traveller.find_or_create_by(name: name)
   end
 
@@ -32,7 +39,9 @@ class CLI
         'Browse the world': :browse,
         'Exit Travel Ta Life': :quit
       }
-    answer = @prompt.select(" ---------------  Ok! What are you up to? ---------------", choices)
+
+    puts "====================================================================================================================="
+    answer = @prompt.select("                                What are you up to?               ", choices)
 
     if answer == :trips
       trip_menu
@@ -45,6 +54,7 @@ class CLI
     else
       main_menu
     end
+
   end
 
   def trip_menu
@@ -56,23 +66,30 @@ class CLI
         'Exit Travel Ta Life': :quit
 
       }
+
     answer = @prompt.select("Choose your destiny", choices)
 
     if answer == :view
       view_trips
       trip_menu
+      puts "==================================================================================="
     elsif answer == :add
       add_trip
       trip_menu
+      puts "==================================================================================="
     elsif answer == :delete
       delete_trip
       trip_menu
+      puts "==================================================================================="
     elsif answer == :main
       main_menu
+      puts "==================================================================================="
     elsif answer == :quit
       quit
+      puts "==================================================================================="
     else
       trip_menu
+      puts "==================================================================================="
     end
   end
 
@@ -82,30 +99,38 @@ class CLI
         'View my activities': :view,
         'Create new activity': :create,
         'Edit post on activity': :edit,
-        'View most popular activity': :popular,
+        'View most popular activity in the database!': :popular,
         'Main menu': :main,
         'Exit Travel Ta Life': :quit
 
       }
+
     answer = @prompt.select("Choose your destiny", choices)
 
     if answer == :view
+      puts "==================================================================================="
       view_activities
       activity_menu
     elsif answer == :create
+      puts "==================================================================================="
       add_activity
       activity_menu
     elsif answer == :edit
+      puts "==================================================================================="
       edit_post_on_activity
       activity_menu
     elsif answer == :popular
+      puts "==================================================================================="
       most_popular_activity
       activity_menu
     elsif answer == :main
+      puts "==================================================================================="
       main_menu
     elsif answer == :quit
+      puts "==================================================================================="
       quit
     else
+      puts "==================================================================================="
       activity_menu
     end
   end
@@ -122,15 +147,20 @@ class CLI
     if answer == :view
       country_facts
       browse_world_menu
+      puts "==================================================================================="
     elsif answer == :browse
       system("mapscii")
       browse_world_menu
+      puts "==================================================================================="
     elsif answer == :main
       main_menu
+      puts "==================================================================================="
     elsif answer == :quit
       quit
+      puts "==================================================================================="
     else
       browse_world_menu
+      puts "==================================================================================="
     end
   end
 
@@ -142,28 +172,44 @@ class CLI
 
     if @traveller.trips.length > 0
       @traveller.trips.uniq.each do |trip|
-      puts "#{trip.city} | #{trip.country}"
+      puts "==================================================================================================="
+      puts Rainbow("                               #{trip.city} | #{trip.country}").yellow
+      puts "==================================================================================================="
+
     end
 
-      puts "Cool! Let's do something else! "
+      puts Rainbow("                     Cool, Let's do something else!").blue.bright
+
     else
-      puts "...No saved trip yet... But guess what, you can add one now!"
+      puts "==================================================================================================="
+      puts Rainbow("                      ...No saved trip yet... But guess what, you can add one now!").magenta
+      puts "==================================================================================================="
+
     end
 
   end
 
   def view_activities
-    puts "Here the activities you've done in your previous trips: "
+    puts Rainbow("                        Here the activities you've done in your previous trips: ").magenta
 
     @traveller = Traveller.find_by(name: @traveller.name)
 
-    if @traveller.activities.length > 0
       @traveller.activities.each do |activity|
-        puts activity.activity_name if (activity.activity_name != nil && activity.activity_name != " ")
+        # activity.activity_name != nil
+        if activity.activity_name != nil
 
+        puts "=========================================================================================================================================="
+        puts "#{                   activity.activity_name}"
+        puts "=========================================================================================================================================="
+
+        # binding.pry
+        # 1
+      else
+        puts "=========================================================================================================================================="
+        puts "                                No activity in your log yet. But let's add one!"
+        puts "=========================================================================================================================================="
       end
-    else
-      puts "No activity in your log yet. But let's add one!"
+
     end
   end
 
@@ -175,10 +221,11 @@ class CLI
 
     end
 
-    trip = Trip.find_or_create_by(new_trip)
-    @traveller.trips << trip
-    trip
-    puts "Cool, you just created #{trip}."
+    @trip = Trip.find_or_create_by(new_trip)
+    @traveller.trips << @trip
+    @trip
+    puts "============================================================================================================================================="
+    puts Rainbow("                                Cool, you just created a new trip.").yellow
   end
 
   def add_activity
@@ -191,10 +238,12 @@ class CLI
     new_activity[:traveller] = @traveller
 
     if @traveller.trips.length > 0
+      puts "==========================================================================================================================================="
       trip_name = @prompt.select('Where was that?', @traveller.get_cities)
       new_activity[:trip] = Trip.find_by(city: trip_name)
     else
-      "Where was that?"
+      puts "==========================================================================================================================================="
+      puts "                                                     Where was that?"
       new_activity[:trip] = add_trip
 
     end
@@ -204,14 +253,15 @@ class CLI
 
   def edit_post_on_activity
     @traveller = Traveller.find_by(name: @traveller.name)
-
     choices = @traveller.get_activities
 
+    if choices != []
     select_activity = @prompt.select("Which post would you like to change?", choices)
-
     activity = Activity.find_by(activity_name: select_activity)
 
-    puts "Activity: #{activity.activity_name} | Current post: #{activity.comment}"
+    puts "============================================================================================================================================"
+    puts Rainbow("                                       Activity: #{activity.activity_name} | Current post: #{activity.comment}").magenta
+    puts "============================================================================================================================================"
 
     new_comment = @prompt.ask("Type your new post: ")
     # set the new comment to the user input
@@ -219,22 +269,32 @@ class CLI
     # save it to the database
     activity.save
 
+    else
+      puts Rainbow("                               Hey, you don't have any activity saved so far!").magenta
+    end
   end
 
   def most_popular_activity
-    system ("People ❤ #{Activity.most_popular_activity} | lolcat -a -d 500")
-
-    # puts "#{Activity.most_popular_activity} is the most popular activity in the world!!!"
+    puts "============================================================================================================================================"
+    puts "                                   People ❤ #{Activity.most_popular_activity}"
+    puts "============================================================================================================================================"
 
   end
 
   def delete_trip
+    # binding.pry
+    # 1
     @traveller = Traveller.find_by(name: @traveller.name)
     choices = @traveller.get_cities
-    to_delete = @prompt.select("Choose your destiny and remove me...", choices)
-    # destroy the relationship between traveller and destination
-    @city = Trip.find_by(city: to_delete)
-    @city.destroy
+    if choices != []
+      to_delete = @prompt.select("Choose your destiny and remove me...", choices)
+      # destroy the relationship between traveller and destination
+      @city = Trip.find_by(city: to_delete)
+      @city.destroy
+    else
+      puts "=========================================================================================================================================="
+      puts Rainbow("                        You don't have anything to delete....").aliceblue
+    end
   end
 
   def get_country_data(name)
@@ -250,7 +310,12 @@ class CLI
      languages = []
      data_hash["languages"][0].each {|key, value| languages << value}
      # binding.pry
-     puts "Country: #{country}  |  Capital: #{capital}  |  Population: #{population}  |  Languages spoken in this country: #{languages.join(", ")}."
+     puts "============================================================================================================================================"
+     puts Rainbow("                                              Country: #{country}  \n
+                                              Capital: #{capital}  \n
+                                              Population: #{population} \n
+                                              Languages spoken in this country: #{languages.join(", ")}.").pink
+                                              puts "==================================================================================================="
 
   end
 
@@ -260,8 +325,7 @@ class CLI
   end
 
   def quit
-   # system("sl")
-   puts "byebye"
+   system("sl")
   end
 
   def start
