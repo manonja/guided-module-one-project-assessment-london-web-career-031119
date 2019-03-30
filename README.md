@@ -35,10 +35,10 @@ Fork and clone the repository: https://github.com/manonja/guided-module-one-proj
 
 Run `bundle install` in your terminal to install the dependencies needed
 
-Run Travel Ta Life in your command line by running:
-`rake run`
+In order to view the world map in your terminal make sure to install `mapscii` as such:
+`sudo npm install -g mapscii`
 
-The main menu should appear in your terminal!
+Run `rake db:seed` to get the database and then `rake run` to start the application.
 
 ---
 
@@ -73,6 +73,12 @@ The main menu should appear in your terminal!
     - Main main
     - Exit
 
+If you choose `Get coutnry facts`, you will be able to enter a country name and it
+will return bunch of informations about this country.
+
+If you choose `Get real`, you will be able to litteraly briwse the world as you
+will get a world map in the terminal. Press a to zoom in and z to zoom out. Press q to exit.
+
   ---
 
 
@@ -86,11 +92,11 @@ The main menu should appear in your terminal!
 - Show traveler's activities and let him create new ones
 - Let the traveler delete a trip
 - Include different menus
-- Use an API
+- Use an API.
 
 ### Stretch goals
 
-- Include Skyscanner API so a user can know how to get to his next trip
+- Include countries API so a user
 - Get animated art in the CLI
 - Enable uppercase, lowercase and mixed-case user input
 - Include colour in the command line interface using ASCII art gems
